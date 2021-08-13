@@ -1,0 +1,6 @@
+framework module Pods_MagicalRecordTableVC {
+  umbrella header "Pods-MagicalRecordTableVC-umbrella.h"
+
+  export *
+  module * { export * }
+}

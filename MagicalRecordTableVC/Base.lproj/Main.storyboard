@@ -20,7 +20,7 @@
                                 <rect key="frame" x="0.0" y="114" width="414" height="535"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" id="wI9-NJ-a1Y">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" restorationIdentifier="cell" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="cell" id="wI9-NJ-a1Y">
                                         <rect key="frame" x="0.0" y="24.5" width="414" height="43.5"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="wI9-NJ-a1Y" id="r5N-c9-dfL">
@@ -46,6 +46,9 @@
                                     <constraint firstAttribute="width" constant="46" id="pqq-e1-iFa"/>
                                 </constraints>
                                 <state key="normal" title="Button"/>
+                                <connections>
+                                    <action selector="userRegister:" destination="BYZ-38-t0r" eventType="touchUpInside" id="wa9-2M-ECf"/>
+                                </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WFp-h7-FMs">
                                 <rect key="frame" x="221" y="715" width="46" height="30"/>
@@ -103,6 +106,7 @@
                     </view>
                     <connections>
                         <outlet property="tableView" destination="3Ka-NV-RrW" id="6E8-EV-NBG"/>
+                        <outlet property="textField" destination="c3X-34-iXv" id="zsA-be-WJk"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>

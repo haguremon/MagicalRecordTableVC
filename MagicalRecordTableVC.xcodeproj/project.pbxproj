@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		55E74D3184D422E68DEE3DBD /* Pods_MagicalRecordTableVC.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C77E4D22722536E9A5636CE7 /* Pods_MagicalRecordTableVC.framework */; };
+		CFC3318A26C8F9B800760238 /* TableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFC3318926C8F9B800760238 /* TableViewCell.swift */; };
 		CFDF35ED26C6526B008664E8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFDF35EC26C6526B008664E8 /* AppDelegate.swift */; };
 		CFDF35EF26C6526B008664E8 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFDF35EE26C6526B008664E8 /* SceneDelegate.swift */; };
 		CFDF35F126C6526B008664E8 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFDF35F026C6526B008664E8 /* ViewController.swift */; };
@@ -22,6 +23,7 @@
 /* Begin PBXFileReference section */
 		1A9D71670539EB91B294DC3F /* Pods-MagicalRecordTableVC.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MagicalRecordTableVC.release.xcconfig"; path = "Target Support Files/Pods-MagicalRecordTableVC/Pods-MagicalRecordTableVC.release.xcconfig"; sourceTree = "<group>"; };
 		C77E4D22722536E9A5636CE7 /* Pods_MagicalRecordTableVC.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MagicalRecordTableVC.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		CFC3318926C8F9B800760238 /* TableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewCell.swift; sourceTree = "<group>"; };
 		CFDF35E926C6526B008664E8 /* MagicalRecordTableVC.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MagicalRecordTableVC.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CFDF35EC26C6526B008664E8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		CFDF35EE26C6526B008664E8 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -81,6 +83,7 @@
 				CFDF35EC26C6526B008664E8 /* AppDelegate.swift */,
 				CFDF35EE26C6526B008664E8 /* SceneDelegate.swift */,
 				CFDF35F026C6526B008664E8 /* ViewController.swift */,
+				CFC3318926C8F9B800760238 /* TableViewCell.swift */,
 				CFDF35F226C6526B008664E8 /* Main.storyboard */,
 				CFDF35F826C6526D008664E8 /* Assets.xcassets */,
 				CFDF35FA26C6526D008664E8 /* LaunchScreen.storyboard */,
@@ -227,6 +230,7 @@
 				CFDF360F26C654A6008664E8 /* User+CoreDataClass.swift in Sources */,
 				CFDF35ED26C6526B008664E8 /* AppDelegate.swift in Sources */,
 				CFDF360E26C654A6008664E8 /* User+CoreDataProperties.swift in Sources */,
+				CFC3318A26C8F9B800760238 /* TableViewCell.swift in Sources */,
 				CFDF35EF26C6526B008664E8 /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

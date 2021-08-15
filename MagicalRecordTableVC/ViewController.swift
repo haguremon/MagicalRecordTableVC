@@ -10,12 +10,13 @@ import MagicalRecord
 
 class ViewController: UIViewController {
     static let cellid = "cell"
-   
+    
     
     var users = [User]()
     //違いがわからん
-    //let context = NSManagedObjectContext.mr_default()
-    let mycontext =  NSManagedObjectContext.mr_()
+    let context = NSManagedObjectContext.mr_default() //ここでやった方がやりやすいいてから順番がちゃんと維持される
+    
+    //let context =  NSManagedObjectContext.mr_()
     //    let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var textField: UITextField!
@@ -25,16 +26,19 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         tableView.dataSource = self
         tableView.delegate = self
+        
+        //        tableView.register(TableViewCell.self, forCellReuseIdentifier: ViewController.cellid)
+        //
         createTasksDataAll()
     }
-   
+    
     @IBAction func userRegister(_ sender: UIButton) {
         
         guard let username = textField.text ,
               !username.isEmpty else { return }
         
         newUserData(name: username)
-        createTasksDataAll()
+        //createTasksDataAll()
         print(users)
     }
     
@@ -45,37 +49,45 @@ class ViewController: UIViewController {
         
         users = userAllData
         
-
-            tableView.reloadData()
+        DispatchQueue.main.async {
+            
+            self.tableView.reloadData()
+            
+        }
         
     }
-
+    
     func newUserData(name: String){
         //特定のコンテキストにエンティティを作成する
-        guard let user = User.mr_createEntity(in: mycontext) else { return }
+        guard let user = User.mr_createEntity(in: context) else { return }
         user.name = name
         user.id = String(UUID().uuidString.dropLast(30)) as String
         
         user.createAt = Date()
         
-        mycontext.mr_saveToPersistentStoreAndWait()
-      
+        context.mr_saveToPersistentStoreAndWait()
+        DispatchQueue.main.async {
+            
+            self.createTasksDataAll()
+            
+        }
+        
         
         
         
     }
     func upDateusernameData(user: User, name: String) {
         user.name = name
-        mycontext.mr_saveToPersistentStoreAndWait()
-
+        context.mr_saveToPersistentStoreAndWait()
+        
         createTasksDataAll()
         
     }
     
     func deleteUserData(user: User) {
-        user.mr_deleteEntity(in: mycontext)
-       
-        mycontext.mr_saveToPersistentStoreAndWait()
+        user.mr_deleteEntity(in: context)
+        
+        context.mr_saveToPersistentStoreAndWait()
         
         createTasksDataAll()
         
@@ -88,22 +100,24 @@ class ViewController: UIViewController {
         dialog.textFields?.first?.text = user.name
         
         let edit = UIAlertAction(title: "edit", style: .default) { [ weak self ] _ in
+            
             guard let field = dialog.textFields?.first,
                   let editData = field.text, !editData.isEmpty else { return }
+            
+            
             self?.upDateusernameData(user: user, name: editData)
-            self?.createTasksDataAll()
+            
+            print(self?.users ?? "")
+            
         }
         
         let delete = UIAlertAction(title: "delete", style: .default) { [ weak self ] _ in
-        
+            
+            
             self?.deleteUserData(user: user)
-        
-           
-            
-            
             
             print(self?.users ?? "")
-
+            
         }
         
         let cancel = UIAlertAction(title: "cancel", style: .cancel)
@@ -114,8 +128,13 @@ class ViewController: UIViewController {
         
         dialog.addAction(cancel)
         
-        self.present(dialog, animated: true)
+        
+        self.present(dialog, animated: true) {
             
+            print(self.users)
+            
+        }
+        
     }
 }
 extension ViewController: UITableViewDataSource , UITableViewDelegate {
@@ -130,8 +149,8 @@ extension ViewController: UITableViewDataSource , UITableViewDelegate {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: ViewController.cellid, for: indexPath)
         
-        
-        cell.textLabel?.text = users[indexPath.item].name
+            cell.textLabel?.text = users[indexPath.row].name
+    
         
         return cell
     }
@@ -142,7 +161,7 @@ extension ViewController: UITableViewDataSource , UITableViewDelegate {
         let user = users[indexPath.row]
         
         presentDialog(user: user)
-    
+        
     }
     
     

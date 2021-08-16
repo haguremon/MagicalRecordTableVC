@@ -10,14 +10,14 @@ import MagicalRecord
 
 class ViewController: UIViewController {
     static let cellid = "cell"
+    private var index = 0
+    
+    @IBOutlet weak var selecteSegControl: UISegmentedControl!
     
     
     var users = [User]()
     //違いがわからん
-    let context = NSManagedObjectContext.mr_default() //ここでやった方がやりやすいいてから順番がちゃんと維持される
-    
-    //let context =  NSManagedObjectContext.mr_()
-    //    let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+    let context = NSManagedObjectContext.mr_default()
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var textField: UITextField!
     
@@ -27,10 +27,82 @@ class ViewController: UIViewController {
         tableView.dataSource = self
         tableView.delegate = self
         
-        //        tableView.register(TableViewCell.self, forCellReuseIdentifier: ViewController.cellid)
-        //
-        createTasksDataAll()
+        createUsersDataAll()
+        let index = UserDefaults.standard.integer(forKey: "index")
+        
+        selecteSegControl.selectedSegmentIndex = index
+        cellEditViewSegmentControl(selecteSegControl)
+    
     }
+    @IBAction func cellEditViewSegmentControl(_ sender: UISegmentedControl) {
+        //let userRequest = User.mr_requestAll(in: context)
+        switch sender.selectedSegmentIndex {
+        case 0:
+            tableView.isEditing = false
+            index = 0
+        case 1:
+            tableView.isEditing = true
+            index = 1
+        case 2:
+         
+            let userRequest = User.mr_requestAllSorted(by: "createAt", ascending: true, with: nil)
+            let controller = User.mr_fetchController(userRequest, delegate: nil, useFileCache: false, groupedBy: nil, in: context)
+            controller.fetchRequest.includesSubentities = false
+            User.mr_performFetch(controller)
+            let userfetchRequest =  controller.fetchRequest
+            
+            guard let users = User.mr_executeFetchRequest(userfetchRequest) as? [User] else { return }
+            
+            
+            
+            
+            self.users = users
+            
+            DispatchQueue.main.async {
+               
+                self.tableView.reloadData()
+            
+            }
+            
+            index = 2
+            print(users)
+            
+            
+        case 3:
+            
+
+            let userRequest = User.mr_requestAllSorted(by: "createAt", ascending: false, with: nil)
+            let controller = User.mr_fetchController(userRequest, delegate: nil, useFileCache: false, groupedBy: nil, in: context)
+            controller.fetchRequest.includesSubentities = false
+            User.mr_performFetch(controller)
+            let userfetchRequest =  controller.fetchRequest
+            
+            guard let users = User.mr_executeFetchRequest(userfetchRequest) as? [User] else { return }
+            
+            
+            
+            
+            self.users = users
+            
+            DispatchQueue.main.async {
+               
+                self.tableView.reloadData()
+            
+            }
+            
+            print(users)
+            
+            index = 3
+        default:
+            print("")
+            
+            
+        }
+        
+        UserDefaults.standard.set(index, forKey: "index")
+        
+    }
+    
     
     @IBAction func userRegister(_ sender: UIButton) {
         
@@ -38,12 +110,12 @@ class ViewController: UIViewController {
               !username.isEmpty else { return }
         
         newUserData(name: username)
-        //createTasksDataAll()
+
         print(users)
     }
     
     //coreDataのCRUD等
-    func createTasksDataAll(){
+    func createUsersDataAll(){
         
         guard let userAllData = User.mr_findAll() as? [User] else { return }
         
@@ -68,7 +140,7 @@ class ViewController: UIViewController {
         context.mr_saveToPersistentStoreAndWait()
         DispatchQueue.main.async {
             
-            self.createTasksDataAll()
+            self.createUsersDataAll()
             
         }
         
@@ -80,7 +152,7 @@ class ViewController: UIViewController {
         user.name = name
         context.mr_saveToPersistentStoreAndWait()
         
-        createTasksDataAll()
+        createUsersDataAll()
         
     }
     
@@ -89,7 +161,7 @@ class ViewController: UIViewController {
         
         context.mr_saveToPersistentStoreAndWait()
         
-        createTasksDataAll()
+        createUsersDataAll()
         
     }
     
@@ -149,8 +221,8 @@ extension ViewController: UITableViewDataSource , UITableViewDelegate {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: ViewController.cellid, for: indexPath)
         
-            cell.textLabel?.text = users[indexPath.row].name
-    
+        cell.textLabel?.text = users[indexPath.row].name
+        
         
         return cell
     }

@@ -16,8 +16,12 @@ class ViewController: UIViewController {
     
     
     var users = [User]()
+    
+    
     //違いがわからん
     let context = NSManagedObjectContext.mr_default()
+    
+    
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var textField: UITextField!
     
@@ -31,6 +35,7 @@ class ViewController: UIViewController {
         let index = UserDefaults.standard.integer(forKey: "index")
         
         selecteSegControl.selectedSegmentIndex = index
+        
         cellEditViewSegmentControl(selecteSegControl)
     
     }
@@ -46,17 +51,17 @@ class ViewController: UIViewController {
         case 2:
          
             let userRequest = User.mr_requestAllSorted(by: "createAt", ascending: true, with: nil)
-            let controller = User.mr_fetchController(userRequest, delegate: nil, useFileCache: false, groupedBy: nil, in: context)
-            controller.fetchRequest.includesSubentities = false
-            User.mr_performFetch(controller)
-            let userfetchRequest =  controller.fetchRequest
+//            let controller = User.mr_fetchController(userRequest, delegate: nil, useFileCache: false, groupedBy: nil, in: context)
+//            controller.fetchRequest.includesSubentities = false
+            //User.mr_performFetch(controller)
+           // let userfetchRequest =  controller.fetchRequest
             
-            guard let users = User.mr_executeFetchRequest(userfetchRequest) as? [User] else { return }
-            
-            
+            guard let users = User.mr_executeFetchRequest(userRequest) as? [User] else { return }
             
             
-            self.users = users
+            
+            
+           self.users = users
             
             DispatchQueue.main.async {
                
@@ -65,19 +70,19 @@ class ViewController: UIViewController {
             }
             
             index = 2
-            print(users)
+            //print(users)
             
             
         case 3:
             
 
             let userRequest = User.mr_requestAllSorted(by: "createAt", ascending: false, with: nil)
-            let controller = User.mr_fetchController(userRequest, delegate: nil, useFileCache: false, groupedBy: nil, in: context)
-            controller.fetchRequest.includesSubentities = false
-            User.mr_performFetch(controller)
-            let userfetchRequest =  controller.fetchRequest
+//            let controller = User.mr_fetchController(userRequest, delegate: nil, useFileCache: false, groupedBy: nil, in: context)
+//            controller.fetchRequest.includesSubentities = false
+//            User.mr_performFetch(controller)
+//            let userfetchRequest =  controller.fetchRequest
             
-            guard let users = User.mr_executeFetchRequest(userfetchRequest) as? [User] else { return }
+            guard let users = User.mr_executeFetchRequest(userRequest) as? [User] else { return }
             
             
             
@@ -90,7 +95,6 @@ class ViewController: UIViewController {
             
             }
             
-            print(users)
             
             index = 3
         default:
@@ -164,6 +168,11 @@ class ViewController: UIViewController {
         createUsersDataAll()
         
     }
+    func searchingData() {
+        
+        
+    }
+    
     
     func presentDialog(user: User){
         
@@ -208,6 +217,62 @@ class ViewController: UIViewController {
         }
         
     }
+    func searchingData(name: String) {
+        
+        let predicate = NSPredicate(format: "name == %@",name)//task一致したやつを指定
+        let fetchRequest = User.mr_requestAll(with: predicate)
+       
+        
+        //fetchRequest.predicate = predicate
+        guard let username = User.mr_executeFetchRequest(fetchRequest) as? [User] else { return }
+        self.users = username
+        
+        DispatchQueue.main.async {
+                self.tableView.reloadData()
+            }
+        
+    }
+    func searchResultdalog(message: String){
+        let dalog = UIAlertController(title: "検索結果", message: message, preferredStyle: .alert)
+        dalog.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+       present(dalog, animated: true, completion: nil)
+    }
+    
+    
+    @IBAction func searchingButton(_ sender: UIButton) {
+        guard let name = textField.text, !name.isEmpty  else {
+            searchResultdalog(message: "値を入れてください")
+            return
+            
+        }
+        searchingData(name: name)
+        
+        guard !users.isEmpty else {
+            searchResultdalog(message: "値がヒットしませんでした")
+            
+            createUsersDataAll()
+            
+            return
+        }
+        searchResultdalog(message: "\(users.count)件ヒットしました")
+            
+         
+ 
+        
+       
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
+            
+            self.createUsersDataAll()
+       
+        }
+        
+   
+    
+    }
+    
+    
+    
 }
 extension ViewController: UITableViewDataSource , UITableViewDelegate {
     func numberOfSections(in tableView: UITableView) -> Int {

@@ -219,7 +219,7 @@ class ViewController: UIViewController {
     }
     func searchingData(name: String) {
         
-        let predicate = NSPredicate(format: "name == %@",name)//task一致したやつを指定
+        let predicate = NSPredicate(format: "name == %@",name)//name一致したやつを指定
         let fetchRequest = User.mr_requestAll(with: predicate)
        
         
